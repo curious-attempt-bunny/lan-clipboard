@@ -1,0 +1,22 @@
+#content
+    .title
+        %h1 LAN Clipboard
+    %ul.clipboard
+        - clipboard.each do |entry|
+            - unless entry[:content].empty?
+                %li.text
+                    &= entry[:content]
+            - if entry[:files]
+                - entry[:files].each_with_index do |file, i|
+                    %li.file
+                        %a{href: "/clipboard/#{entry[:id]}/files/#{i}", target: '__blank'}
+                            &= file[:filename]
+    %form{ action: "/share", method: "post", enctype: "multipart/form-data"}
+        %p
+            %label{:for => "text"} Text:
+            %input{type: "text", name: "content", class: "text"}
+        %p
+            %label{:for => "files"} File(s):
+            %input{type: "file", name: "files[]", multiple: true }
+        %p
+            %input{type: "submit", value: "Share", class: "button"}
